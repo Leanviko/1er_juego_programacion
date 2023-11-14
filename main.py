@@ -1,14 +1,20 @@
 import pygame
 import sys
 import random
-import configuracion
+import json
 
 
 pygame.init()
 
+with open("configuracion.json","r") as conf:
+    configuracion = json.load(conf)
+
+ANCHO_VENTANA = configuracion["ancho"]
+ALTO_VENTANA = configuracion["alto"]
+
 reloj = pygame.time.Clock()
 
-pantalla = pygame.display.set_mode((configuracion.WIDTH, configuracion.HEIGHT))
+pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("jueguito piola")
 
 jugando = True
