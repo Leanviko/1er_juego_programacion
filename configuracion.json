@@ -1,4 +1,7 @@
 {
 "ancho": 800,
-"alto": 600
+"alto": 600,
+
+"alto_jugador": 50,
+"ancho_jugador": 90
 }

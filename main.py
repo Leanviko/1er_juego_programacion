@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import json
+import jugador
 
 
 pygame.init()
@@ -23,6 +24,8 @@ while jugando:
         if evento.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+
+    pygame.draw.rect(pantalla,(255,255,255),(ANCHO_VENTANA//2,500,100,20))
 
     pygame.display.flip()
 
