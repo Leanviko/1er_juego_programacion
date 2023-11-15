@@ -1,7 +1,10 @@
 {
-"ancho": 800,
+"ancho": 1000,
 "alto": 600,
 
 "alto_jugador": 50,
-"ancho_jugador": 90
+"ancho_jugador": 90,
+"velocidad_jugador": 5,
+
+"frecuencia": 10
 }
