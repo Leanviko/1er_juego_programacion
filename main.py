@@ -2,7 +2,8 @@ import pygame
 import sys
 import random
 import json
-from bloques import dibujar_bloques
+from bloques import logica_bloques
+from esquema_bloques import bloques
 
 
 pygame.init()
@@ -15,8 +16,7 @@ ALTO_VENTANA = configuracion["alto"]
 FRECUENCIA = configuracion["frecuencia"] 
 VEL_JUGADOR = configuracion["velocidad_jugador"]
 VEL_PELOTA = configuracion["velocidad_pelota"]
-ANCHO_BLOQUE = configuracion["ancho_bloque"]
-ALTO_BLOQUE = configuracion["alto_bloque"]
+
 
 #colores
 FONDO = configuracion["fondo_pantalla"]
@@ -48,15 +48,7 @@ vel_y = VEL_PELOTA
 #jugador
 jugador_rect = pygame.Rect(ANCHO_VENTANA//2-300,ALTO_VENTANA-50,100,15)
 
-bloques = [
-    {"rect": pygame.Rect(100, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "normal", "golpes": 1},
-    {"rect": pygame.Rect(200, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "bonus", "golpes": 3},
-]
-#crear_bloques(50,20,10,5,bloques)
-#crear_bloques(100,100,50,20,60,0,bloques)
-bloq_norm =[]
-bloq_esp =[]
-#dibujar_bloques(bloques,50,20,bloq_norm,bloq_esp)
+
 jugando = True
 while jugando:
 
@@ -94,6 +86,9 @@ while jugando:
         vel_x *= -1
     if pelota_rect.top <= 0:
         pelota_rect.top = 0
+        vel_y *= -1
+    if pelota_rect.top > ALTO_VENTANA:
+        pelota_rect.midbottom = jugador_rect.midtop
         vel_y *= -1 
     if pygame.Rect.colliderect(pelota_rect, jugador_rect):
         pelota_rect.bottom = jugador_rect.top
@@ -101,18 +96,22 @@ while jugando:
         
 
     
-    for bloque in bloques:
-        if bloque["tipo"] == "normal":
+    vel_y = logica_bloques(bloques, pelota_rect, vel_y)
+    # for bloque in bloques:  
+    #     if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
+    #         bloque["golpes"] -= 1
+    #         vel_y *= -1
+    #         break
+    #     if bloque["golpes"] <= 0:
+    #         bloques.remove(bloque)
+    
+    for bloque in bloques:  
+        if bloque["tipo"] == "facil":
             pygame.draw.rect(pantalla, (0,50,200), bloque["rect"])
-        elif bloque["tipo"] == "bonus":
+        elif bloque["tipo"] == "medio":
             pygame.draw.rect(pantalla, (0,200,50), bloque["rect"])
-        
-        if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
-            bloque["golpes"] -= 1
-            vel_y *= -1
-            break
-        if bloque["golpes"] <= 0:
-            bloques.remove(bloque)
+        elif bloque["tipo"] == "dificil":
+            pygame.draw.rect(pantalla, (200,10,50), bloque["rect"])
 
 
 
