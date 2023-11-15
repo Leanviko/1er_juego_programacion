@@ -2,7 +2,7 @@ import pygame
 import sys
 import random
 import json
-import perritos
+from bloques import dibujar_bloques
 
 
 pygame.init()
@@ -15,6 +15,14 @@ ALTO_VENTANA = configuracion["alto"]
 FRECUENCIA = configuracion["frecuencia"] 
 VEL_JUGADOR = configuracion["velocidad_jugador"]
 VEL_PELOTA = configuracion["velocidad_pelota"]
+ANCHO_BLOQUE = configuracion["ancho_bloque"]
+ALTO_BLOQUE = configuracion["alto_bloque"]
+
+#colores
+FONDO = configuracion["fondo_pantalla"]
+BLANCO = configuracion["blanco"]
+ROJO = configuracion["rojo"]
+
 
 reloj = pygame.time.Clock()
 
@@ -22,13 +30,8 @@ pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("jueguito piola")
 
 
-BLANCO= (255,255,255)
-FONDO = (100,100,100)
-ROJO = (255,0,0)
 mover_izquierda = False
 mover_derecha = False
-
-
 
 
 pelota_imagen = pygame.image.load('imagenes/pelota.png').convert_alpha()
@@ -41,14 +44,19 @@ pelota_rect.centery = ALTO_VENTANA//2
 vel_x = VEL_PELOTA
 vel_y = VEL_PELOTA
 
-#gravedad
-# salto_constante = -35
-# gravedad = 1.5
 
 #jugador
 jugador_rect = pygame.Rect(ANCHO_VENTANA//2-300,ALTO_VENTANA-50,100,15)
 
-
+bloques = [
+    {"rect": pygame.Rect(100, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "normal", "golpes": 1},
+    {"rect": pygame.Rect(200, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "bonus", "golpes": 3},
+]
+#crear_bloques(50,20,10,5,bloques)
+#crear_bloques(100,100,50,20,60,0,bloques)
+bloq_norm =[]
+bloq_esp =[]
+#dibujar_bloques(bloques,50,20,bloq_norm,bloq_esp)
 jugando = True
 while jugando:
 
@@ -89,7 +97,26 @@ while jugando:
         vel_y *= -1 
     if pygame.Rect.colliderect(pelota_rect, jugador_rect):
         pelota_rect.bottom = jugador_rect.top
-        vel_y *= -1 
+        vel_y *= -1
+        
+
+    
+    for bloque in bloques:
+        if bloque["tipo"] == "normal":
+            pygame.draw.rect(pantalla, (0,50,200), bloque["rect"])
+        elif bloque["tipo"] == "bonus":
+            pygame.draw.rect(pantalla, (0,200,50), bloque["rect"])
+        
+        if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
+            bloque["golpes"] -= 1
+            vel_y *= -1
+            break
+        if bloque["golpes"] <= 0:
+            bloques.remove(bloque)
+
+
+
+
 
     pantalla.blit(pelota_imagen, pelota_rect)
     pygame.draw.rect(pantalla,(0,0,0),jugador_rect)
