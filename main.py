@@ -2,8 +2,8 @@ import pygame
 import sys
 import random
 import json
-from bloques import logica_bloques
-from esquema_bloques import bloques
+import bloques
+from esquema_bloques import esq_bloques
 
 
 pygame.init()
@@ -96,22 +96,18 @@ while jugando:
         
 
     
-    vel_y = logica_bloques(bloques, pelota_rect, vel_y)
-    # for bloque in bloques:  
-    #     if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
-    #         bloque["golpes"] -= 1
-    #         vel_y *= -1
-    #         break
-    #     if bloque["golpes"] <= 0:
-    #         bloques.remove(bloque)
+    vel_y = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y)
+
+    bloques.dibujado_bloques(pantalla,esq_bloques)
     
-    for bloque in bloques:  
-        if bloque["tipo"] == "facil":
-            pygame.draw.rect(pantalla, (0,50,200), bloque["rect"])
-        elif bloque["tipo"] == "medio":
-            pygame.draw.rect(pantalla, (0,200,50), bloque["rect"])
-        elif bloque["tipo"] == "dificil":
-            pygame.draw.rect(pantalla, (200,10,50), bloque["rect"])
+    
+    # for bloque in bloques:  
+    #     if bloque["tipo"] == "facil":
+    #         pygame.draw.rect(pantalla, (0,50,200), bloque["rect"])
+    #     elif bloque["tipo"] == "medio":
+    #         pygame.draw.rect(pantalla, (0,200,50), bloque["rect"])
+    #     elif bloque["tipo"] == "dificil":
+    #         pygame.draw.rect(pantalla, (200,10,50), bloque["rect"])
 
 
 

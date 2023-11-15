@@ -7,7 +7,7 @@ with open("configuracion.json","r") as conf:
 ANCHO_BLOQUE = configuracion["ancho_bloque"]
 ALTO_BLOQUE = configuracion["alto_bloque"]
 
-bloques = [
+esq_bloques = [
     #primer fila
     {"rect": pygame.Rect(100, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "facil", "golpes": 1},
     {"rect": pygame.Rect(160, 100, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 3},
