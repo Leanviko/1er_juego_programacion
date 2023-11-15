@@ -4,7 +4,8 @@
 
 "alto_jugador": 50,
 "ancho_jugador": 90,
-"velocidad_jugador": 5,
+"velocidad_jugador": 9,
+"velocidad_pelota": 7,
 
 "frecuencia": 10
 }
