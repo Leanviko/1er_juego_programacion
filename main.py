@@ -3,6 +3,7 @@ import sys
 import random
 import json
 import bloques
+import pelota
 from esquema_bloques import esq_bloques
 
 
@@ -13,15 +14,15 @@ with open("configuracion.json","r") as conf:
 
 ANCHO_VENTANA = configuracion["ancho"]
 ALTO_VENTANA = configuracion["alto"]
-FRECUENCIA = configuracion["frecuencia"] 
 VEL_JUGADOR = configuracion["velocidad_jugador"]
 VEL_PELOTA = configuracion["velocidad_pelota"]
-
-
+TAM_FUENTE = configuracion["tamano_fuente"]
 #colores
 FONDO = configuracion["fondo_pantalla"]
 BLANCO = configuracion["blanco"]
 ROJO = configuracion["rojo"]
+#fuente
+fuente = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE)
 
 
 reloj = pygame.time.Clock()
@@ -33,26 +34,24 @@ pygame.display.set_caption("jueguito piola")
 mover_izquierda = False
 mover_derecha = False
 
-
+fondo = pygame.image.load("imagenes/fondo_juego.png").convert_alpha()
 pelota_imagen = pygame.image.load('imagenes/pelota.png').convert_alpha()
 pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
 pelota_rect = pelota_imagen.get_rect()
 
+#jugador
+jugador_rect = pygame.Rect(ANCHO_VENTANA//2-50,ALTO_VENTANA-50,100,15)
 # pelota
-pelota_rect.right = 70
-pelota_rect.centery = ALTO_VENTANA//2
+pelota_rect.midbottom = jugador_rect.midtop
 vel_x = VEL_PELOTA
 vel_y = VEL_PELOTA
 
-
-#jugador
-jugador_rect = pygame.Rect(ANCHO_VENTANA//2-300,ALTO_VENTANA-50,100,15)
 
 
 jugando = True
 while jugando:
 
-    pantalla.fill(FONDO)
+    pantalla.blit(fondo, (0, 0))
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -75,45 +74,17 @@ while jugando:
     if mover_izquierda == True:
         jugador_rect.centerx -= VEL_JUGADOR
     
-    pelota_rect.centerx += vel_x
-    pelota_rect.centery += vel_y
 
-    if pelota_rect.right >= ANCHO_VENTANA:
-        pelota_rect.right = ANCHO_VENTANA
-        vel_x *= -1
-    if  pelota_rect.left <= 0:
-        pelota_rect.left = 0
-        vel_x *= -1
-    if pelota_rect.top <= 0:
-        pelota_rect.top = 0
-        vel_y *= -1
-    if pelota_rect.top > ALTO_VENTANA:
-        pelota_rect.midbottom = jugador_rect.midtop
-        vel_y *= -1 
-    if pygame.Rect.colliderect(pelota_rect, jugador_rect):
-        pelota_rect.bottom = jugador_rect.top
-        vel_y *= -1
-        
 
-    
+    vel_x, vel_y = pelota.pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA)
+
     vel_y = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y)
 
+
+
     bloques.dibujado_bloques(pantalla,esq_bloques)
-    
-    
-    # for bloque in bloques:  
-    #     if bloque["tipo"] == "facil":
-    #         pygame.draw.rect(pantalla, (0,50,200), bloque["rect"])
-    #     elif bloque["tipo"] == "medio":
-    #         pygame.draw.rect(pantalla, (0,200,50), bloque["rect"])
-    #     elif bloque["tipo"] == "dificil":
-    #         pygame.draw.rect(pantalla, (200,10,50), bloque["rect"])
-
-
-
-
-
     pantalla.blit(pelota_imagen, pelota_rect)
+
     pygame.draw.rect(pantalla,(0,0,0),jugador_rect)
 
 

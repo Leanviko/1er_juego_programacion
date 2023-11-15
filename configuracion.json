@@ -1,8 +1,11 @@
 {
 "ancho": 800,
 "alto": 600,
+"tamano_fuente":20,
+
 "ancho_bloque": 50,
 "alto_bloque": 20,
+"espaciado": 7,
 
 "alto_jugador": 50,
 "ancho_jugador": 90,
@@ -11,7 +14,5 @@
 
 "blanco": [255,255,255],
 "fondo_pantalla": [100,100,100],
-"rojo": [100,0,0],
-
-"frecuencia": 10
+"rojo": [100,0,0]
 }
