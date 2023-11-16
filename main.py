@@ -4,6 +4,7 @@ import random
 import json
 import bloques
 import pelota
+from estadisticas import puntaje_pantalla, vidas_pantalla
 from esquema_bloques import esq_bloques
 
 
@@ -46,6 +47,8 @@ pelota_rect.midbottom = jugador_rect.midtop
 vel_x = VEL_PELOTA
 vel_y = VEL_PELOTA
 
+puntaje = 0
+vidas = 5
 
 
 jugando = True
@@ -76,16 +79,19 @@ while jugando:
     
 
 
-    vel_x, vel_y = pelota.pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA)
+    vel_x, vel_y, vidas = pelota.pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas)
 
-    vel_y = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y)
+    vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje)
 
-
+    puntaje_pantalla(pantalla,fuente, puntaje)
+    vidas_pantalla(pantalla,fuente, vidas)
 
     bloques.dibujado_bloques(pantalla,esq_bloques)
     pantalla.blit(pelota_imagen, pelota_rect)
 
     pygame.draw.rect(pantalla,(0,0,0),jugador_rect)
+
+    
 
 
     pygame.display.flip()
