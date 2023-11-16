@@ -1,6 +1,6 @@
 import pygame
 
-def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_ventana, vidas):
+def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_ventana, vidas,sel_col_jug,sel_col_pelota):
     pelota_rect.centerx += vel_x
     pelota_rect.centery += vel_y
 
@@ -17,8 +17,19 @@ def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_v
         pelota_rect.midbottom = jugador_rect.midtop
         vidas -= 1
         vel_y *= -1 
+    
     if pygame.Rect.colliderect(pelota_rect, jugador_rect):
         pelota_rect.bottom = jugador_rect.top
+        sel_col_pelota = sel_col_jug
         vel_y *= -1
     
-    return vel_x, vel_y, vidas
+    return vel_x, vel_y, vidas, sel_col_pelota
+
+def cambiar_color_pelota(nueva_imagen):
+    
+    pelota_imagen = pygame.image.load(nueva_imagen).convert_alpha()
+    pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
+    color_actual = nueva_imagen
+    
+    return pelota_imagen, color_actual
+    

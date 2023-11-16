@@ -3,7 +3,7 @@ import sys
 import random
 import json
 import bloques
-import pelota
+from pelota import cambiar_color_pelota, pelota_logica
 from estadisticas import puntaje_pantalla, vidas_pantalla
 from esquema_bloques import esq_bloques
 
@@ -36,7 +36,18 @@ mover_izquierda = False
 mover_derecha = False
 
 fondo = pygame.image.load("imagenes/fondo_juego.png").convert_alpha()
-pelota_imagen = pygame.image.load('imagenes/pelota.png').convert_alpha()
+
+
+sel_col_jug = 0
+sel_col_pelota = 2
+#color_jugador = lista_colores[sel_col_jug]
+#color_pelota = lista_colores[sel_col_pelota]
+
+
+
+
+color_actual = 'imagenes/pelota_azul.png'
+pelota_imagen = pygame.image.load(color_actual).convert_alpha()
 pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
 pelota_rect = pelota_imagen.get_rect()
 
@@ -53,8 +64,9 @@ vidas = 5
 
 jugando = True
 while jugando:
-
+    print(f"{sel_col_jug} = {sel_col_pelota}")
     pantalla.blit(fondo, (0, 0))
+    
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -65,6 +77,10 @@ while jugando:
                 mover_izquierda = True
             if evento.key == pygame.K_d:
                 mover_derecha = True
+            if evento.key == pygame.K_SPACE:
+                sel_col_jug +=1
+                if sel_col_jug>2:
+                    sel_col_jug = 0
 
         if evento.type == pygame.KEYUP:
             if evento.key == pygame.K_a:
@@ -79,20 +95,32 @@ while jugando:
     
 
 
-    vel_x, vel_y, vidas = pelota.pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas)
+    vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota)
 
-    vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje)
+    vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota)
 
     puntaje_pantalla(pantalla,fuente, puntaje)
     vidas_pantalla(pantalla,fuente, vidas)
 
     bloques.dibujado_bloques(pantalla,esq_bloques)
-    pantalla.blit(pelota_imagen, pelota_rect)
-
-    pygame.draw.rect(pantalla,(0,0,0),jugador_rect)
-
     
 
+    if sel_col_jug == 0:
+        pygame.draw.rect(pantalla,(50,200,20),jugador_rect)
+    elif sel_col_jug == 1:
+        pygame.draw.rect(pantalla,(10,50,200),jugador_rect)
+    elif sel_col_jug == 2:
+        pygame.draw.rect(pantalla,(200,50,10),jugador_rect)
+
+    if sel_col_pelota == 0:
+        pelota_imagen, color_actual = cambiar_color_pelota('imagenes/pelota_verde.png')
+    elif sel_col_pelota == 1:
+        pelota_imagen, color_actual = cambiar_color_pelota('imagenes/pelota_azul.png')
+    elif sel_col_pelota == 2:
+        pelota_imagen, color_actual = cambiar_color_pelota('imagenes/pelota_roja.png')
+    
+
+    pantalla.blit(pelota_imagen, pelota_rect)
 
     pygame.display.flip()
 

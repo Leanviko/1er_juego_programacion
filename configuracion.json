@@ -13,6 +13,10 @@
 "velocidad_pelota": 7,
 
 "blanco": [255,255,255],
-"fondo_pantalla": [100,100,100],
-"rojo": [100,0,0]
+"rojo": [200,50,0],
+"azul": [0,20,200],
+"verde": [0,200,50],
+
+"fondo_pantalla": [100,100,100]
+
 }
