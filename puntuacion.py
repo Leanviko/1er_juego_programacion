@@ -14,3 +14,4 @@ def cargar_puntaje():
             puntaje = int(next(lectura)[0])
             return puntaje
     except FileNotFoundError:
+        print("error")

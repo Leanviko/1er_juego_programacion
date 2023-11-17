@@ -107,7 +107,7 @@ while jugando:
 
                 vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota)
 
-                vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota)
+                vel_y, vel_x, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, vel_x, puntaje, sel_col_jug, sel_col_pelota)
 
                 if vidas == 0:
                     partida_perdida = True
@@ -115,7 +115,7 @@ while jugando:
                 puntaje_pantalla(pantalla,fuente, puntaje)
                 vidas_pantalla(pantalla,fuente, vidas)
 
-                bloques.dibujado_bloques(pantalla,esq_bloques)
+                bloques.dibujado_bloques(pantalla,esq_bloques,fuente)
                 
 
                 if sel_col_jug == 0:

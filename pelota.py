@@ -20,7 +20,16 @@ def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_v
     
     if pygame.Rect.colliderect(pelota_rect, jugador_rect):
         pelota_rect.bottom = jugador_rect.top
-        sel_col_pelota = sel_col_jug
+        sel_col_pelota = sel_col_jug #pasar color a la pelota
+
+        if pelota_rect.midbottom[0] <= jugador_rect.topright[0] and pelota_rect.midbottom[0] >= jugador_rect.midtop[0]:
+            if vel_x < 0:
+                vel_x *= -1
+
+        if pelota_rect.midbottom[0] >= jugador_rect.topleft[0] and pelota_rect.midbottom[0] <= jugador_rect.midtop[0]:
+            if vel_x > 0:
+                vel_x *= -1
+
         vel_y *= -1
     
     return vel_x, vel_y, vidas, sel_col_pelota
