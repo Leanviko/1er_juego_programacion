@@ -43,7 +43,7 @@ pygame.display.set_caption("jueguito piola")
 
 iniciar_juego = False
 pausa_juego = False
-pantalla_fin = False
+partida_perdida = False
 
 mover_izquierda = False
 mover_derecha = False
@@ -55,6 +55,9 @@ boton_iniciar = pygame.image.load("imagenes/botones/button_start.png").convert_a
 boton_salir = pygame.image.load("imagenes/botones/button_exit.png").convert_alpha()
 boton_reanudar = pygame.image.load("imagenes/botones/button_resume.png").convert_alpha()
 boton_reiniciar = pygame.image.load("imagenes/botones/button_restart.png").convert_alpha()
+#carteles
+cartel_gameover = pygame.image.load("imagenes/carteles/game_over.png").convert_alpha()
+game_over_rect = cartel_gameover.get_rect()
 
 sel_col_jug = 0
 sel_col_pelota = 2
@@ -72,7 +75,7 @@ vel_x = VEL_PELOTA
 vel_y = VEL_PELOTA
 
 puntaje = 0
-vidas = 5
+vidas = configuracion["vidas"]
 
 
 jugando = True
@@ -83,45 +86,53 @@ while jugando:
         if botones.crear_boton(pantalla, boton_iniciar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos) == True:
                 iniciar_juego = True
     else:
-        if pausa_juego == True:
-            #pantalla.fill(ROJO)
-            if botones.crear_boton(pantalla, boton_reanudar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos):
-                pausa_juego = False
+        if partida_perdida == True:
+            game_over_rect.centerx = ANCHO_VENTANA//2
+            game_over_rect.centery = ALTO_VENTANA//2
+            pantalla.blit(cartel_gameover, game_over_rect)
+            #if botones.crear_boton(pantalla, boton_iniciar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos) == True:
+                    #iniciar_juego = True
         else:
+            if pausa_juego == True:
+                if botones.crear_boton(pantalla, boton_reanudar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos):
+                    pausa_juego = False
+            else:
 
-            pantalla.blit(fondo, (0, 0))
-            
-            if mover_derecha == True:
-                jugador_rect.centerx += VEL_JUGADOR
-            if mover_izquierda == True:
-                jugador_rect.centerx -= VEL_JUGADOR
+                pantalla.blit(fondo, (0, 0))
+                
+                if mover_derecha == True:
+                    jugador_rect.centerx += VEL_JUGADOR
+                if mover_izquierda == True:
+                    jugador_rect.centerx -= VEL_JUGADOR
 
-            vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota)
+                vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota)
 
-            vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota)
+                vel_y, puntaje = bloques.logica_bloques(esq_bloques, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota)
 
-            puntaje_pantalla(pantalla,fuente, puntaje)
-            vidas_pantalla(pantalla,fuente, vidas)
+                if vidas == 0:
+                    partida_perdida = True
 
-            bloques.dibujado_bloques(pantalla,esq_bloques)
-            
+                puntaje_pantalla(pantalla,fuente, puntaje)
+                vidas_pantalla(pantalla,fuente, vidas)
 
-            if sel_col_jug == 0:
-                pygame.draw.rect(pantalla,(50,200,20),jugador_rect)
-            elif sel_col_jug == 1:
-                pygame.draw.rect(pantalla,(10,50,200),jugador_rect)
-            elif sel_col_jug == 2:
-                pygame.draw.rect(pantalla,(200,50,10),jugador_rect)
+                bloques.dibujado_bloques(pantalla,esq_bloques)
+                
 
-            if sel_col_pelota == 0:
-                pelota_imagen, color_actual = cambiar_color_pelota(PEL_VERDE)
-            elif sel_col_pelota == 1:
-                pelota_imagen, color_actual = cambiar_color_pelota(PEL_AZUL)
-            elif sel_col_pelota == 2:
-                pelota_imagen, color_actual = cambiar_color_pelota(PEL_ROJA)
-        
+                if sel_col_jug == 0:
+                    pygame.draw.rect(pantalla,(50,200,20),jugador_rect)
+                elif sel_col_jug == 1:
+                    pygame.draw.rect(pantalla,(10,50,200),jugador_rect)
+                elif sel_col_jug == 2:
+                    pygame.draw.rect(pantalla,(200,50,10),jugador_rect)
 
-        pantalla.blit(pelota_imagen, pelota_rect)
+                if sel_col_pelota == 0:
+                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_VERDE)
+                elif sel_col_pelota == 1:
+                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_AZUL)
+                elif sel_col_pelota == 2:
+                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_ROJA)
+
+                pantalla.blit(pelota_imagen, pelota_rect)
     
     for evento in pygame.event.get():
             if evento.type == pygame.QUIT:

@@ -21,6 +21,8 @@
 
 "pelota_roja": "imagenes/pelota_roja.png",
 "pelota_azul": "imagenes/pelota_azul.png",
-"pelota_verde": "imagenes/pelota_verde.png"
+"pelota_verde": "imagenes/pelota_verde.png",
+
+"vidas": 2
 
 }
