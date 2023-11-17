@@ -6,8 +6,6 @@ with open("configuracion.json","r") as conf:
 
 ANCHO_BLOQUE = configuracion["ancho_bloque"]
 ALTO_BLOQUE = configuracion["alto_bloque"]
-#"ancho_bloque": 50,
-#"alto_bloque": 20,
 ESPACIADO = configuracion["espaciado"]
 
 x =100

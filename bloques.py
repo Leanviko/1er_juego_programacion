@@ -8,7 +8,7 @@ with open("configuracion.json","r") as conf:
 ROJO = configuracion["rojo"]
 AZUL = configuracion["azul"]
 VERDE = configuracion["verde"]
-#colores = {"rojo":1,"azul":2,"verde":3}
+
 
 def logica_bloques(lista_bloques, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota):
     for bloque in lista_bloques:  

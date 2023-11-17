@@ -17,6 +17,10 @@
 "azul": [0,20,200],
 "verde": [0,200,50],
 
-"fondo_pantalla": [100,100,100]
+"fondo_pantalla": [100,100,100],
+
+"pelota_roja": "imagenes/pelota_roja.png",
+"pelota_azul": "imagenes/pelota_azul.png",
+"pelota_verde": "imagenes/pelota_verde.png"
 
 }
