@@ -1,18 +1,21 @@
 import pygame
 
-def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_ventana, vidas,sel_col_jug,sel_col_pelota):
+def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_ventana, vidas,sel_col_jug,sel_col_pelota,sonido):
     pelota_rect.centerx += vel_x
     pelota_rect.centery += vel_y
 
     if pelota_rect.right >= ancho_ventana:
         pelota_rect.right = ancho_ventana
         vel_x *= -1
+        sonido.play()
     if  pelota_rect.left <= 0:
         pelota_rect.left = 0
         vel_x *= -1
+        sonido.play()
     if pelota_rect.top <= 0:
         pelota_rect.top = 0
         vel_y *= -1
+        sonido.play()
     if pelota_rect.top > alto_ventana:
         pelota_rect.midbottom = jugador_rect.midtop
         vidas -= 1
@@ -29,7 +32,7 @@ def pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_v
         if pelota_rect.midbottom[0] >= jugador_rect.topleft[0] and pelota_rect.midbottom[0] <= jugador_rect.midtop[0]:
             if vel_x > 0:
                 vel_x *= -1
-
+        sonido.play()
         vel_y *= -1
     
     return vel_x, vel_y, vidas, sel_col_pelota

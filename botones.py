@@ -1,6 +1,6 @@
 import pygame
 
-def crear_boton(superficie,imagen, pos_x, pos_y, pos):
+def crear_boton(superficie,imagen, pos_x, pos_y, pos, sonido):
 
     accion = False
 
@@ -14,6 +14,7 @@ def crear_boton(superficie,imagen, pos_x, pos_y, pos):
         #print("dentro")
         if pygame.mouse.get_pressed()[0]:
             #print("presionado")
+            sonido.play()
             accion = True
     
     superficie.blit(imagen,imagen_rect)

@@ -10,40 +10,30 @@ AZUL = configuracion["azul"]
 VERDE = configuracion["verde"]
 
 
-def logica_bloques(lista_bloques, pelota_rect, vel_y, vel_x, puntaje, sel_col_jug, sel_col_pelota):
+def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota):
 
     for bloque in lista_bloques:  
         if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
             
             if bloque["golpes"] == (sel_col_pelota+1):
                 bloque["golpes"] -= 1
-            #vel_y *= -1
+                puntaje += 50
+            vel_y *= -1
             
-            if bloque["rect"].left >= pelota_rect.right or bloque["rect"].right <= pelota_rect.left:
-                print("golpe costado")
-                if bloque["rect"].left >= pelota_rect.right:
-                    pelota_rect.right = bloque["rect"].left
-                else:
-                    pelota_rect.left = bloque["rect"].right
-                vel_x *= -1
-                
-            if bloque["rect"].top <= pelota_rect.bottom or bloque["rect"].bottom >= pelota_rect.top:
-                #print("golpe arriba/abajo")
-                if bloque["rect"].bottom >= pelota_rect.top:
-                    pelota_rect.top = bloque["rect"].bottom
-
-                elif bloque["rect"].top <= pelota_rect.bottom:
-                    pelota_rect.bottom = bloque["rect"].top
-
-                vel_y *= -1
-
-            break
-            
+            break            
+                        
         if bloque["golpes"] <= 0:
-            lista_bloques.remove(bloque)
+            pos_x = bloque["rect"].centerx
+            pos_y= bloque["rect"].centery
+
             puntaje += 100
+            bonus = random.randrange(0,10)
+            if bonus == 1:
+                lista_bonus.append({"tipo":1,"pos_x": pos_x,"pos_y": pos_y})
+
+            lista_bloques.remove(bloque)
         
-    return vel_y,vel_x, puntaje
+    return vel_y, puntaje
 
 def dibujado_bloques(pantalla, lista_bloques,fuente):
     for bloque in lista_bloques: 
@@ -59,3 +49,21 @@ def dibujado_bloques(pantalla, lista_bloques,fuente):
         
         texto_rect = texto_golpes.get_rect(center=bloque["rect"].center)
         pantalla.blit(texto_golpes,texto_rect)
+
+
+#     print("golpe costado")
+            #     if bloque["rect"].left >= pelota_rect.right:
+            #         pelota_rect.right = bloque["rect"].left
+            #     else:
+            #         pelota_rect.left = bloque["rect"].right
+            #     vel_x *= -1
+                
+            # if bloque["rect"].top <= pelota_rect.bottom or bloque["rect"].bottom >= pelota_rect.top:
+            #     #print("golpe arriba/abajo")
+            #     if bloque["rect"].bottom >= pelota_rect.top:
+            #         pelota_rect.top = bloque["rect"].bottom
+
+            #     elif bloque["rect"].top <= pelota_rect.bottom:
+            #         pelota_rect.bottom = bloque["rect"].top
+
+            #     vel_y *= -1
