@@ -50,8 +50,11 @@ game_over = pygame.mixer.Sound("sonidos/game_over.mp3")
 game_over.set_volume(0.5)
 victoria = pygame.mixer.Sound("sonidos/victoria.mp3")
 victoria.set_volume(0.5)
+pausa = pygame.mixer.Sound("sonidos/pausa.mp3")
+pausa.set_volume(0.9)
 game_over_sono = False
 victoria_sono = False
+pausa_sono = False
 reloj = pygame.time.Clock()
 
 
@@ -63,6 +66,7 @@ pausa_juego = False
 partida_perdida = False
 partida_ganada = False
 
+#movimiento
 mover_izquierda = False
 mover_derecha = False
 pos = pygame.mouse.get_pos()
@@ -135,9 +139,15 @@ while jugando:
             
         else:
             if pausa_juego == True:
+                pygame.mixer.music.pause()
+                
+                if pausa_sono == False:
+                    pausa.play()
+                    pausa_sono = True
+                
                 if botones.crear_boton(pantalla, boton_reanudar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos,rebote):
                     pausa_juego = False
-                #pygame.mixer.music.stop()
+
             elif partida_ganada == True:
                     pygame.mixer.music.stop()
                     if victoria_sono == False:
@@ -152,9 +162,11 @@ while jugando:
                     
                 #pygame.mixer.music.stop()
             else:
+                if pausa_sono == True:
+                    pausa_sono = False
+                    pygame.mixer.music.unpause()
 
                 pantalla.blit(fondo, (0, 0))
-                
                 #limites jugador
                 if mover_derecha == True and jugador_rect.right <= ANCHO_VENTANA:
                     jugador_rect.centerx += VEL_JUGADOR
