@@ -12,6 +12,32 @@ from estadisticas import puntaje_pantalla, vidas_pantalla
 from esquema_bloques import esq_bloques
 from puntuacion import cargar_puntaje, guardar_puntaje
 
+"""
+Juego arkanoid con colores, el objetivo es romper todos los bloques de la pantalla utilizando la bola y haciéndola rebotar 
+en una pequeña plataforma que se moverá con el teclado.
+
+movimiento izquierda : tecla 'A'
+movimiento derecha : tecla 'D'
+
+Se puede pausar el juego con la tecla 'P'
+
+La originalidad que encontré para este juego es que la bola no rompe los bloques cuyo color no coincide con ella.
+El jugador podrá cambiar el color de su plataforma apretada la tecla 'espacio' y la pelota se "contagiará" de ese color
+cuando colisione con ella
+
+bloques rojos : 3 impactos
+bloques azules : 2 impactos
+bloques verdes : 1 impactos
+
+
+De manera azarosa habrá una desventaja para el jugador que achicara la plataforma, este efecto durará 5 segundos.
+
+El juego guardará el puntaje si rompe el anterior récord
+
+
+
+"""
+
 
 
 pygame.init()
@@ -59,12 +85,17 @@ pausa.set_volume(0.9)
 game_over_sono = False
 victoria_sono = False
 pausa_sono = False
+
+#reloj del juego
 reloj = pygame.time.Clock()
+tiempo = None
 
 
 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-pygame.display.set_caption("jueguito piola")
+pygame.display.set_caption("jueguito")
 
+
+#estados del juego
 iniciar_juego = False
 pausa_juego = False
 partida_perdida = False
@@ -73,8 +104,11 @@ partida_ganada = False
 #movimiento
 mover_izquierda = False
 mover_derecha = False
+
+#posicion del mouse
 pos = pygame.mouse.get_pos()
 
+# imagenes de fondos
 fondo_menu = pygame.image.load("imagenes/fondo_main_menu.jpg").convert_alpha()
 fondo = pygame.image.load("imagenes/fondo_juego.png").convert_alpha()
 #botones
@@ -89,13 +123,19 @@ cartel_ganaste = pygame.image.load("imagenes/carteles/ganaste.png").convert_alph
 cartel_ganaste = pygame.transform.scale_by(cartel_ganaste, 0.3)
 ganaste_rect = cartel_ganaste.get_rect()
 #bonus
-bonus_lento = pygame.image.load("imagenes/desventajas/jug_chico.png").convert_alpha()
-bonus_lento = pygame.transform.scale_by(bonus_lento, 0.2)
-bonus_lento_rect = bonus_lento.get_rect()
+bonus_corto = pygame.image.load("imagenes/especiales/jug_chico.png").convert_alpha()
+bonus_corto = pygame.transform.scale_by(bonus_corto, 0.2)
+bonus_corto_rect = bonus_corto.get_rect()
 
-lista_bonus_imagen = [bonus_lento]
-lista_bonus_rect = [bonus_lento_rect]
+bonus_grande = pygame.image.load("imagenes/especiales/jug_grande.png").convert_alpha()
+bonus_grande = pygame.transform.scale_by(bonus_grande, 0.2)
+bonus_grande_rect = bonus_corto.get_rect()
+
+#listas de tipos de elementos especiales
+lista_bonus_imagen = [bonus_corto, bonus_grande]
+lista_bonus_rect = [bonus_corto_rect, bonus_grande_rect]
 lista_bonus=[]
+lista_objetos_bonus = []
 
 #pelota
 sel_col_jug = 1
@@ -106,7 +146,6 @@ pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
 pelota_rect = pelota_imagen.get_rect()
 
 #jugador 
-
 jugador_imagen = pygame.image.load("imagenes/jugador/j_azul_largo.png").convert_alpha()
 jugador_imagen_escala = pygame.transform.scale_by(jugador_imagen,0.2)
 jugador_rect = jugador_imagen_escala.get_rect()
@@ -144,11 +183,16 @@ while jugando:
         if botones.crear_boton(pantalla, boton_salir, ANCHO_VENTANA//2,ALTO_VENTANA//2 + 100,pos,rebote) == True:
                 jugando = False
     else:
-        #Game over
+        #Pantalla Game over
         if partida_perdida == True:
             pygame.mixer.music.stop()
             if game_over_sono == False:
-                game_over.play()
+
+                #1er try 
+                try:
+                    game_over.play()
+                except FileNotFoundError:
+                    print("no existe el audio")
                 game_over_sono = True
 
             game_over_rect.centerx = ANCHO_VENTANA//2
@@ -161,7 +205,7 @@ while jugando:
             pantalla.blit(cartel_gameover, game_over_rect)
             
         else:
-            #partida en pausa
+            #Pantalla partida en pausa
             if pausa_juego == True:
                 pygame.mixer.music.pause()
                 
@@ -171,7 +215,8 @@ while jugando:
                 
                 if botones.crear_boton(pantalla, boton_reanudar, ANCHO_VENTANA//2,ALTO_VENTANA//2,pos,rebote):
                     pausa_juego = False
-            #partida ganada
+            
+            # Pantalla de partida ganada
             elif partida_ganada == True:
                     pygame.mixer.music.stop()
                     if victoria_sono == False:
@@ -188,7 +233,6 @@ while jugando:
                     puntaje_text = fuente.render(f" Puntaje: {puntaje}", True,(100,100,100))
                     pantalla.blit(puntaje_text,(250,400))
                     
-                
             else:
 
                 # Loop Juego
@@ -208,15 +252,17 @@ while jugando:
                 vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota,rebote)
 
                 #logica bloques y penalizacion
-                vel_y, puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota)
-                vel_x, vel_y, vidas, ancho_jugador = bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas, ancho_jugador)
+                vel_y, puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota)
 
-                #puntaje
+                vel_x, vel_y, vidas, ancho_jugador, bonus_estado, tiempo = bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas, ancho_jugador, tiempo)
+
+                #puntaje al perder la partida
                 if vidas == 0:
                     puntaje_text = cargar_puntaje()
                     if int(puntaje) > int(puntaje_text):
                         guardar_puntaje(puntaje)
                     partida_perdida = True
+
                 record = cargar_puntaje()
                 puntaje_pantalla(pantalla,fuente, puntaje, record)
 
@@ -227,7 +273,12 @@ while jugando:
                 bloques.dibujado_bloques(pantalla,esq_bloques,fuente)
                 
                 #penalizacion jugador pequeño
-                jugador_imagen, color_actual = cambiar_tamaño_jugador(sel_col_jug,ancho_jugador, jugador_rect)
+                jugador_imagen, color_actual = cambiar_tamaño_jugador(sel_col_jug,ancho_jugador)
+
+                if bonus_estado == True and (pygame.time.get_ticks() - tiempo > 5000):
+                    ancho_jugador = 1
+
+
                 jugador_imagen_escala = pygame.transform.scale_by(jugador_imagen,0.2)
                 juegador_rect = jugador_imagen_escala.get_rect()
 

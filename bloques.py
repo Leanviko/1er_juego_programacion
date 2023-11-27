@@ -10,7 +10,19 @@ AZUL = configuracion["azul"]
 VERDE = configuracion["verde"]
 
 
-def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_col_jug, sel_col_pelota):
+def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota):
+
+    """
+    Manejo del las colisiones del la bola con los bloques
+
+    Args:
+    -lista_bloques (list) : lista de cada bloque
+    -lista_bonus(list): lista de elementos especiales
+    -pelota_rect : rectangulo de la pelota
+    -vel_y (int): velocidad en el eje y
+    -puntaje (int): puntaje acumulado de la partida
+    -sel_col_pelota (int): color de la pelota
+    """
 
     for bloque in lista_bloques:  
         if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
@@ -27,15 +39,26 @@ def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_c
             pos_y= bloque["rect"].centery
 
             puntaje += 100
-            bonus = random.randrange(0,10)
+            bonus = random.randrange(1,6)
             if bonus == 1:
                 lista_bonus.append({"tipo":1,"pos_x": pos_x,"pos_y": pos_y})
+            # if bonus == 2:
+            #     lista_bonus.append({"tipo":2,"pos_x": pos_x,"pos_y": pos_y})
 
             lista_bloques.remove(bloque)
         
     return vel_y, puntaje
 
-def dibujado_bloques(pantalla, lista_bloques,fuente):
+def dibujado_bloques(pantalla, lista_bloques, fuente):
+    """
+    dibujado de los rectangulos de los bloques en la pantalla
+
+    pantalla: superficie donde sera colocado
+    lista_bloques: lista de bloques
+    fuente: fuente de los numeros que se mostraran dentro de cada bloque
+
+    """
+
     for bloque in lista_bloques: 
         golpes = bloque["golpes"]
         texto_golpes = fuente.render(f"{golpes}", True,(255,255,255))

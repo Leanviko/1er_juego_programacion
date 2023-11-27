@@ -7,6 +7,8 @@ def guardar_puntaje(puntaje):
         writer.writerow([puntaje])
 
 def cargar_puntaje():
+
+    # 2do try
     try:
         with open("puntuacion.csv","r") as archivo:
             lectura = csv.reader(archivo)

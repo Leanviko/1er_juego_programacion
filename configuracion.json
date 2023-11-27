@@ -6,8 +6,6 @@
 "ancho_bloque": 50, 
 "alto_bloque": 20, 
 "espaciado": 2, 
-"alto_jugador": 20, 
-"ancho_jugador": 100, 
 "velocidad_jugador": 9, 
 "velocidad_pelota": 6, 
 "blanco": [255, 255, 255], 
