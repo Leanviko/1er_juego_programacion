@@ -42,13 +42,16 @@ fuente = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE)
 #sonidos
 
 pygame.mixer.music.load('sonidos/musica_fondo.mp3')
-pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.set_volume(0.5)
 
 rebote = pygame.mixer.Sound("sonidos/rebote.wav")
 rebote.set_volume(0.1)
 game_over = pygame.mixer.Sound("sonidos/game_over.mp3")
-game_over.set_volume(0.1)
+game_over.set_volume(0.5)
+victoria = pygame.mixer.Sound("sonidos/victoria.mp3")
+victoria.set_volume(0.5)
 game_over_sono = False
+victoria_sono = False
 reloj = pygame.time.Clock()
 
 
@@ -107,7 +110,6 @@ pygame.mixer.music.play()
 jugando = True
 while jugando:
 
-    print(cargar_puntaje())
     if iniciar_juego == False:
         pantalla.fill(FONDO)
         titulo = fuente_titulo.render(f"Arkanoid UTN", True,(10,10,10))
@@ -137,7 +139,10 @@ while jugando:
                     pausa_juego = False
                 #pygame.mixer.music.stop()
             elif partida_ganada == True:
-                
+                    pygame.mixer.music.stop()
+                    if victoria_sono == False:
+                        victoria.play()
+                        victoria_sono = True
                     
                     puntaje_text = cargar_puntaje()
                     if int(puntaje) > int(puntaje_text):
