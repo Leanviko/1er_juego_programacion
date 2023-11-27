@@ -20,12 +20,12 @@ esq_bloques = [
     #{"rect": pygame.Rect(x+rec_x*1, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 1},
     {"rect": pygame.Rect(x+rec_x*2, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "facil", "golpes": 1},
     {"rect": pygame.Rect(x+rec_x*3, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 1},
-    #{"rect": pygame.Rect(x+rec_x*4, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 2},
+    {"rect": pygame.Rect(x+rec_x*4, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 1},
     {"rect": pygame.Rect(x+rec_x*5, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 1},
-    # {"rect": pygame.Rect(x+rec_x*6, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 3},
-    #{"rect": pygame.Rect(x+rec_x*7, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 1},
+    {"rect": pygame.Rect(x+rec_x*6, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 1},
+    {"rect": pygame.Rect(x+rec_x*7, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 1},
     {"rect": pygame.Rect(x+rec_x*8, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "dificil", "golpes": 1},
-    # {"rect": pygame.Rect(x+rec_x*9, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 2},
+    #{"rect": pygame.Rect(x+rec_x*9, y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "medio", "golpes": 1},
 
     # #segunda fila
     # {"rect": pygame.Rect(x, y+rec_y, ANCHO_BLOQUE, ALTO_BLOQUE), "tipo": "facil", "golpes": 1},

@@ -1,7 +1,9 @@
 import pygame
 
 
-def bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas):
+
+
+def bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas, ancho_jugador):
     
     
     try:
@@ -18,16 +20,14 @@ def bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, li
         if pygame.Rect.colliderect(pelota_rect, lista_bonus_rect[0]) and bonus_estado == False:
             lista_bonus.remove(bonus)
             tiempo = pygame.time.get_ticks()
-            # vel_x *= 2
-            # vel_y *= 2
-            vidas -= 1
-            bonus_estado = True
-            print(tiempo)
+            
+            ancho_jugador = 0
+                #print(tiempo)
 
-        # if bonus_estado == True and (pygame.time.get_ticks() - tiempo > 1000):
-        #     vel_x = 6
-        #     vel_y = 6
-        #     tiempo = pygame.time.get_ticks()
+                # if bonus_estado == True and (pygame.time.get_ticks() - tiempo > 1000):
+                #     vel_x = 6
+                #     vel_y = 6
+                #     tiempo = pygame.time.get_ticks()
         
 
-    return vel_x, vel_y, vidas
+    return vel_x, vel_y, vidas, ancho_jugador

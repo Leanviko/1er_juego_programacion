@@ -1,29 +1,30 @@
 {
-"ancho": 800,
-"alto": 600,
-"tamano_fuente_titulo":30,
-"tamano_fuente":20,
-
-"ancho_bloque": 50,
-"alto_bloque": 20,
-"espaciado": 2,
-
-"alto_jugador": 50,
-"ancho_jugador": 90,
-"velocidad_jugador": 9,
-"velocidad_pelota": 6,
-
-"blanco": [255,255,255],
-"rojo": [240,50,55],
-"azul": [43,164,231],
-"verde": [59,255,99],
-
-"fondo_pantalla": [100,100,200],
-
-"pelota_roja": "imagenes/pelota_roja.png",
-"pelota_azul": "imagenes/pelota_azul.png",
+"ancho": 800, 
+"alto": 600, 
+"tamano_fuente_titulo": 30, 
+"tamano_fuente": 20, 
+"ancho_bloque": 50, 
+"alto_bloque": 20, 
+"espaciado": 2, 
+"alto_jugador": 20, 
+"ancho_jugador": 100, 
+"velocidad_jugador": 9, 
+"velocidad_pelota": 6, 
+"blanco": [255, 255, 255], 
+"rojo": [240, 50, 55], 
+"azul": [43, 164, 231], 
+"verde": [59, 255, 99], 
+"fondo_pantalla": [100, 100, 200], 
+"pelota_roja": "imagenes/pelota_roja.png", 
+"pelota_azul": "imagenes/pelota_azul.png", 
 "pelota_verde": "imagenes/pelota_verde.png",
 
-"vidas": 3
+"jugador_rojo_largo": "imagenes/jugador/j_rojo_largo.png", 
+"jugador_rojo_corto": "imagenes/jugador/j_rojo_corto.png", 
+"jugador_azul_largo": "imagenes/jugador/j_azul_largo.png", 
+"jugador_azul_corto": "imagenes/jugador/j_azul_corto.png", 
+"jugador_verde_largo": "imagenes/jugador/j_verde_largo.png", 
+"jugador_verde_corto": "imagenes/jugador/j_verde_corto.png", 
 
+"vidas": 3
 }
