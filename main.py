@@ -4,7 +4,7 @@ import random
 from assets import *
 from estados import *
 import json
-import bloques
+from bloques import *
 from bonus import *
 from jugador import *
 import estadisticas
@@ -183,12 +183,10 @@ while jugando:
 
                 movimiento_jugador(jugador_parametros,mover_derecha,mover_izquierda, VEL_JUGADOR, ANCHO_VENTANA)
 
-                # movimiento pelota
                 pelota_logica(pelota_parametros, jugador_parametros, ANCHO_VENTANA, ALTO_VENTANA, datos_pantalla ,rebote)
 
-                #logica bloques y penalizacion
-                puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, puntaje, pelota_parametros)
-                vidas, tiempo = bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jugador_parametros, tiempo)
+                logica_bloques(esq_bloques, lista_bonus, datos_pantalla, pelota_parametros)
+                tiempo = bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jugador_parametros, tiempo)
 
                 #puntaje al perder la partida
                 if datos_pantalla["vidas"] == 0:
@@ -196,6 +194,7 @@ while jugando:
                     if int(puntaje) > int(puntaje_text):
                         guardar_puntaje(puntaje)
                     partida_perdida = True
+
                 #ganar partida cuando la lista de bloques esta vacia
                 if len(esq_bloques)== 0:
                     partida_ganada = True     
@@ -207,9 +206,9 @@ while jugando:
                 #dibujo bloques
                 
                 #temporizador
-                temporizador_pantalla(pantalla, fuente, contador_inicial)
+                temporizador_pantalla(pantalla, fuente,contador, datos_pantalla)
 
-                bloques.dibujado_bloques(pantalla,esq_bloques,fuente)
+                dibujado_bloques(pantalla,esq_bloques,fuente)
                 #penalizacion jugador pequeño
                 cambiar_tamaño_jugador(jugador_parametros)
 

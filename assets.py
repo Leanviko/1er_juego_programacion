@@ -30,7 +30,10 @@ PEL_VERDE = configuracion["pelota_verde"]
 
 vidas = configuracion["vidas"]
 
-contador_inicial = 0
+
+  # Intervalo de 10 segundos en milisegundos (10000ms = 10s)
+
+contador ={"contador_inicial" :0,"intervalo_contador":5000,"cont_intervalos" : 0,"mostrar_descuento":False,"momento_desc":0}
 puntaje = 0
 color_actual = PEL_AZUL
 

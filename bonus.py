@@ -54,4 +54,4 @@ def bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jug
         
 
     #return vel_x, vel_y, vidas, ancho_jugador, bonus_estado, tiempo
-    return vidas, tiempo
+    return tiempo

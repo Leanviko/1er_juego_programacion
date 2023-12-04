@@ -10,7 +10,7 @@ AZUL = configuracion["azul"]
 VERDE = configuracion["verde"]
 
 
-def logica_bloques(lista_bloques, lista_bonus, puntaje, pelota_parametros):
+def logica_bloques(lista_bloques, lista_bonus, datos_pantalla, pelota_parametros):
 
     """
     
@@ -32,7 +32,7 @@ def logica_bloques(lista_bloques, lista_bonus, puntaje, pelota_parametros):
             
             if bloque["golpes"] == (pelota_parametros["sel_col_pelota"]+1):
                 bloque["golpes"] -= 1
-                puntaje += 50
+                datos_pantalla["puntaje"] += 50
             pelota_parametros["vel_y"] *= -1
             
             break            
@@ -41,7 +41,7 @@ def logica_bloques(lista_bloques, lista_bonus, puntaje, pelota_parametros):
             pos_x = bloque["rect"].centerx
             pos_y= bloque["rect"].centery
 
-            puntaje += 100
+            datos_pantalla["puntaje"] += 100
             bonus = random.randrange(1,6)
             if bonus == 1:
                 lista_bonus.append({"tipo":1,"pos_x": pos_x,"pos_y": pos_y})
@@ -51,7 +51,7 @@ def logica_bloques(lista_bloques, lista_bonus, puntaje, pelota_parametros):
             lista_bloques.remove(bloque)
         
     #return vel_y, puntaje
-    return  puntaje
+    #return  puntaje
 
 def dibujado_bloques(pantalla, lista_bloques, fuente):
     """
