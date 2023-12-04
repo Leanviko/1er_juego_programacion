@@ -42,7 +42,7 @@ pygame.init()
 try:
     pygame.mixer.init()
 except:
-     print("No se encuentra dispositivo de audio")  
+    print("No se encuentra dispositivo de audio")  
 
 #sonido fondo
 pygame.mixer.music.load('sonidos/musica_fondo.mp3')
@@ -76,7 +76,7 @@ jugador_parametros = {
     "ancho_jugador": ancho_jugador, 
     "sel_col_jug": 1, 
     "centro_x":ANCHO_VENTANA//2-50,
-    "centro_y":ALTO_VENTANA-50
+    "centro_y":ALTO_VENTANA-60
     }
 jugador_parametros["jugador_rect"].centerx = jugador_parametros["centro_x"]
 jugador_parametros["jugador_rect"].centery = jugador_parametros["centro_y"]
@@ -176,6 +176,10 @@ while jugando:
 
                 pantalla.blit(fondo, (0, 0))
                 
+                # temporizador = pygame.time.get_ticks()-contador_inicial
+                # segundos = temporizador//1000
+                # centesimas = (temporizador%1000)//10
+                
 
                 movimiento_jugador(jugador_parametros,mover_derecha,mover_izquierda, VEL_JUGADOR, ANCHO_VENTANA)
 
@@ -201,6 +205,10 @@ while jugando:
                 #vidas en pantalla
                 vidas_pantalla(pantalla,fuente, datos_pantalla)
                 #dibujo bloques
+                
+                #temporizador
+                temporizador_pantalla(pantalla, fuente, contador_inicial)
+
                 bloques.dibujado_bloques(pantalla,esq_bloques,fuente)
                 #penalizacion jugador pequeño
                 cambiar_tamaño_jugador(jugador_parametros)

@@ -2,10 +2,8 @@ import pygame
 from assets import *
 
 def pelota_logica(pelota_parametros, jugador_parametros, ANCHO_VENTANA, ALTO_VENTANA, datos_pantalla ,rebote):
+
     """
-    
-    pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ancho_ventana, alto_ventana, vidas,sel_col_jug,sel_col_pelota,sonido)
-    
     Logica de movimiento y atributos de la pelota
 
     Args:
@@ -21,8 +19,7 @@ def pelota_logica(pelota_parametros, jugador_parametros, ANCHO_VENTANA, ALTO_VEN
     -sonido (.wav): sonido de la pelota al impactar
     
     """
-    #pelota_parametros["pelota_rect"].centerx += vel_x
-    #pelota_parametros["pelota_rect"].centery += vel_y
+
     
     pelota_parametros["pelota_rect"].centerx += pelota_parametros["vel_x"] 
     pelota_parametros["pelota_rect"].centery += pelota_parametros["vel_y"] 

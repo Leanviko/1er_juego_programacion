@@ -18,7 +18,7 @@ def puntaje_pantalla(pantalla, fuente, datos_pantalla, record):
     pantalla.blit(texto_puntaje,(650,50))
 
     puntaje_mayor = fuente.render(f"record:{record}", True,(0,0,0))
-    pantalla.blit(puntaje_mayor,(300,50))
+    pantalla.blit(puntaje_mayor,(20,560))
 
 def vidas_pantalla(pantalla, fuente, datos_pantalla):
     """
@@ -32,3 +32,16 @@ def vidas_pantalla(pantalla, fuente, datos_pantalla):
     vid = datos_pantalla["vidas"]
     vidas = fuente.render(f"Vidas: {vid}", True,(0,0,0))
     pantalla.blit(vidas,(50,50))
+
+def temporizador_pantalla(pantalla, fuente, contador_inicial):
+        temporizador = pygame.time.get_ticks()-contador_inicial
+        segundos = temporizador//1000
+        centesimas = (temporizador%1000)//10
+
+        temporizador_text = fuente.render(f"Tiempo",True,(0,0,0))
+        temporizador_rect = temporizador_text.get_rect(center =(400,50))
+        centesimas_text = fuente.render(f"{segundos}:{centesimas}",True,(0,0,0))
+        centesimas_rect = centesimas_text.get_rect(center =(400,70))
+
+        pantalla.blit(temporizador_text,temporizador_rect)
+        pantalla.blit(centesimas_text,centesimas_rect)

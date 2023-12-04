@@ -28,9 +28,10 @@ PEL_ROJA = configuracion["pelota_roja"]
 PEL_AZUL = configuracion["pelota_azul"]
 PEL_VERDE = configuracion["pelota_verde"]
 
-puntaje = 0
 vidas = configuracion["vidas"]
 
+contador_inicial = 0
+puntaje = 0
 color_actual = PEL_AZUL
 
 

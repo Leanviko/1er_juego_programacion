@@ -30,11 +30,10 @@ def bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jug
     try:
         for bonus in lista_bonus:
             if bonus["tipo"] == 1 :
-                #lista_bonus_rect[0].centerx = bonus["pos_x"]
+
                 bonus_tipos[0]["bonus_cort_rect"].centerx = bonus["pos_x"]
                 bonus_tipos[0]["bonus_cort_rect"].centery = bonus["pos_y"]
 
-                #pantalla.blit(lista_bonus_imagen[0], lista_bonus_rect[0])
                 pantalla.blit(bonus_tipos[0]["bonus_cort_img"], bonus_tipos[0]["bonus_cort_rect"])
 
     except IndexError:
@@ -51,16 +50,6 @@ def bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jug
         jugador_parametros["ancho_jugador"] = 1
         bonus_tipos[0]["estado_bonus"] = False
 
-
-    '''
-    for bonus in lista_bonus:
-        if pygame.Rect.colliderect(pelota_rect, lista_bonus_rect[0]):
-            lista_bonus.remove(bonus)
-            ancho_jugador = 0
-            bonus_estado = True
-            tiempo = pygame.time.get_ticks()
-
-    '''
 
         
 
