@@ -1,6 +1,8 @@
 import pygame
 import sys
 import random
+from assets import *
+from estados import *
 import json
 import bloques
 from bonus import bonus_logica
@@ -12,6 +14,10 @@ from estadisticas import puntaje_pantalla, vidas_pantalla
 from esquema_bloques import esq_bloques
 from puntuacion import cargar_puntaje, guardar_puntaje
 
+pygame.init()
+pygame.mixer.init()
+#pygame.display.set_caption("jueguito")
+#pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 """
 Juego arkanoid con colores, el objetivo es romper todos los bloques de la pantalla utilizando la bola y haciéndola rebotar 
 en una pequeña plataforma que se moverá con el teclado.
@@ -34,134 +40,143 @@ De manera azarosa habrá una desventaja para el jugador que achicara la platafor
 
 El juego guardará el puntaje si rompe el anterior récord
 
-
-
 """
 
 
 
-pygame.init()
-pygame.mixer.init()
 
-with open("configuracion.json","r") as conf:
-    configuracion = json.load(conf)
+# with open("configuracion.json","r") as conf:
+#     configuracion = json.load(conf)
 
-ANCHO_VENTANA = configuracion["ancho"]
-ALTO_VENTANA = configuracion["alto"]
-VEL_JUGADOR = configuracion["velocidad_jugador"]
-VEL_PELOTA = configuracion["velocidad_pelota"]
+# ANCHO_VENTANA = configuracion["ancho"]
+# ALTO_VENTANA = configuracion["alto"]
+# VEL_JUGADOR = configuracion["velocidad_jugador"]
+# VEL_PELOTA = configuracion["velocidad_pelota"]
 
-TAM_FUENTE = configuracion["tamano_fuente"]
-TAM_FUENTE_TITULO = configuracion["tamano_fuente_titulo"]
-#colores
-FONDO = configuracion["fondo_pantalla"]
-BLANCO = configuracion["blanco"]
-ROJO = configuracion["rojo"]
-AZUL = configuracion["azul"]
-VERDE = configuracion["verde"]
-#imagenes pelota
-PEL_ROJA = configuracion["pelota_roja"]
-PEL_AZUL = configuracion["pelota_azul"]
-PEL_VERDE = configuracion["pelota_verde"]
+# TAM_FUENTE = configuracion["tamano_fuente"]
+# TAM_FUENTE_TITULO = configuracion["tamano_fuente_titulo"]
+# #colores
+# FONDO = configuracion["fondo_pantalla"]
+# BLANCO = configuracion["blanco"]
+# ROJO = configuracion["rojo"]
+# AZUL = configuracion["azul"]
+# VERDE = configuracion["verde"]
+# #imagenes pelota
+# PEL_ROJA = configuracion["pelota_roja"]
+# PEL_AZUL = configuracion["pelota_azul"]
+# PEL_VERDE = configuracion["pelota_verde"]
 
 
-#fuente
-fuente_titulo = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE_TITULO)
-fuente = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE)
+# #fuente
+# fuente_titulo = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE_TITULO)
+# fuente = pygame.font.Font("fuentes\AtariClassic.ttf",TAM_FUENTE)
 
 #sonidos
 
 pygame.mixer.music.load('sonidos/musica_fondo.mp3')
-pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.set_volume(0.001)
 
-rebote = pygame.mixer.Sound("sonidos/rebote.wav")
-rebote.set_volume(0.1)
-game_over = pygame.mixer.Sound("sonidos/game_over.mp3")
-game_over.set_volume(0.5)
-victoria = pygame.mixer.Sound("sonidos/victoria.mp3")
-victoria.set_volume(0.5)
-pausa = pygame.mixer.Sound("sonidos/pausa.mp3")
-pausa.set_volume(0.9)
-game_over_sono = False
-victoria_sono = False
-pausa_sono = False
+# rebote = pygame.mixer.Sound("sonidos/rebote.wav")
+# rebote.set_volume(0.1)
+# game_over = pygame.mixer.Sound("sonidos/game_over.mp3")
+# game_over.set_volume(0.5)
+# victoria = pygame.mixer.Sound("sonidos/victoria.mp3")
+# victoria.set_volume(0.5)
+# pausa = pygame.mixer.Sound("sonidos/pausa.mp3")
+# pausa.set_volume(0.9)
+# game_over_sono = False
+# victoria_sono = False
+# pausa_sono = False
 
 #reloj del juego
 reloj = pygame.time.Clock()
 tiempo = None
 
 
-pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-pygame.display.set_caption("jueguito")
 
 
-#estados del juego
-iniciar_juego = False
-pausa_juego = False
-partida_perdida = False
-partida_ganada = False
 
-#movimiento
-mover_izquierda = False
-mover_derecha = False
+# #estados del juego
+# iniciar_juego = False
+# pausa_juego = False
+# partida_perdida = False
+# partida_ganada = False
+
+# #movimiento
+# mover_izquierda = False
+# mover_derecha = False
 
 #posicion del mouse
 pos = pygame.mouse.get_pos()
 
-# imagenes de fondos
-fondo_menu = pygame.image.load("imagenes/fondo_main_menu.jpg").convert_alpha()
-fondo = pygame.image.load("imagenes/fondo_juego.png").convert_alpha()
-#botones
-boton_iniciar = pygame.image.load("imagenes/botones/button_start.png").convert_alpha()
-boton_salir = pygame.image.load("imagenes/botones/button_exit.png").convert_alpha()
-boton_reanudar = pygame.image.load("imagenes/botones/button_resume.png").convert_alpha()
-boton_reiniciar = pygame.image.load("imagenes/botones/button_restart.png").convert_alpha()
-#carteles
-cartel_gameover = pygame.image.load("imagenes/carteles/game_over.png").convert_alpha()
-game_over_rect = cartel_gameover.get_rect()
-cartel_ganaste = pygame.image.load("imagenes/carteles/ganaste.png").convert_alpha()
-cartel_ganaste = pygame.transform.scale_by(cartel_ganaste, 0.3)
-ganaste_rect = cartel_ganaste.get_rect()
-#bonus
-bonus_corto = pygame.image.load("imagenes/especiales/jug_chico.png").convert_alpha()
-bonus_corto = pygame.transform.scale_by(bonus_corto, 0.2)
-bonus_corto_rect = bonus_corto.get_rect()
+# # imagenes de fondos
+# fondo_menu = pygame.image.load("imagenes/fondo_main_menu.jpg").convert_alpha()
+# fondo = pygame.image.load("imagenes/fondo_juego.png").convert_alpha()
+# #botones
+# boton_iniciar = pygame.image.load("imagenes/botones/button_start.png").convert_alpha()
+# boton_salir = pygame.image.load("imagenes/botones/button_exit.png").convert_alpha()
+# boton_reanudar = pygame.image.load("imagenes/botones/button_resume.png").convert_alpha()
+# boton_reiniciar = pygame.image.load("imagenes/botones/button_restart.png").convert_alpha()
+# #carteles
+# cartel_gameover = pygame.image.load("imagenes/carteles/game_over.png").convert_alpha()
+# game_over_rect = cartel_gameover.get_rect()
+# cartel_ganaste = pygame.image.load("imagenes/carteles/ganaste.png").convert_alpha()
+# cartel_ganaste = pygame.transform.scale_by(cartel_ganaste, 0.3)
+# ganaste_rect = cartel_ganaste.get_rect()
+# #bonus
+# bonus_corto = pygame.image.load("imagenes/especiales/jug_chico.png").convert_alpha()
+# bonus_corto = pygame.transform.scale_by(bonus_corto, 0.2)
+# bonus_corto_rect = bonus_corto.get_rect()
 
-bonus_grande = pygame.image.load("imagenes/especiales/jug_grande.png").convert_alpha()
-bonus_grande = pygame.transform.scale_by(bonus_grande, 0.2)
-bonus_grande_rect = bonus_corto.get_rect()
+# bonus_grande = pygame.image.load("imagenes/especiales/jug_grande.png").convert_alpha()
+# bonus_grande = pygame.transform.scale_by(bonus_grande, 0.2)
+# bonus_grande_rect = bonus_corto.get_rect()
 
 #listas de tipos de elementos especiales
-lista_bonus_imagen = [bonus_corto, bonus_grande]
-lista_bonus_rect = [bonus_corto_rect, bonus_grande_rect]
+#lista_bonus_imagen = [bonus_corto, bonus_grande]
+#lista_bonus_rect = [bonus_corto_rect, bonus_grande_rect]
 lista_bonus=[]
 lista_objetos_bonus = []
+bonus_tipos = [{"bonus_cort_img":bonus_corto,"bonus_cort_rect":bonus_corto_rect,"estado_bonus": False},{"bonus_grand_img":bonus_grande,"bonus_grand_rect":bonus_grande_rect,"estado_bonus": False}]
 
 #pelota
-sel_col_jug = 1
-sel_col_pelota = 2
-color_actual = PEL_AZUL
-pelota_imagen = pygame.image.load(color_actual).convert_alpha()
-pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
-pelota_rect = pelota_imagen.get_rect()
+
+#sel_col_pelota = 2
+#color_actual = PEL_AZUL
+# pelota_imagen = pygame.image.load(color_actual).convert_alpha()
+# pelota_imagen = pygame.transform.scale_by(pelota_imagen,0.1)
+#pelota_rect = pelota_imagen.get_rect()
+
+pelota_parametros = {"pelota_imagen":pelota_imagen,"pelota_rect":pelota_rect, "vel_x" : VEL_PELOTA , "vel_y": VEL_PELOTA, "color_actual" : PEL_AZUL, "sel_col_pelota" : sel_col_pelota}
 
 #jugador 
-jugador_imagen = pygame.image.load("imagenes/jugador/j_azul_largo.png").convert_alpha()
-jugador_imagen_escala = pygame.transform.scale_by(jugador_imagen,0.2)
-jugador_rect = jugador_imagen_escala.get_rect()
-jugador_rect.center = (ANCHO_VENTANA//2-50, ALTO_VENTANA-50)
-ancho_jugador = 1 #[1]: ancho [0]: corto
+# jugador_imagen = pygame.image.load("imagenes/jugador/j_azul_largo.png").convert_alpha()
+# jugador_imagen_escala = pygame.transform.scale_by(jugador_imagen,0.2)
+# jugador_rect = jugador_imagen_escala.get_rect()
+
+# ancho_jugador = 1 #[1]: ancho [0]: corto
+# sel_col_jug = 1
+#*--------------------------------------------------------------------------------------------------------------------<<<<<<
+jugador_parametros = {
+    "jugador_imagen" : jugador_imagen, "jugador_rect" : jugador_rect, "ancho_jugador": ancho_jugador, "sel_col_jug": 1,"centro_x":ANCHO_VENTANA//2-50,
+    "centro_y":ALTO_VENTANA-50
+    }
+jugador_parametros["jugador_rect"].centerx = jugador_parametros["centro_x"]
+jugador_parametros["jugador_rect"].centery = jugador_parametros["centro_y"]
 
 # posicion pelota
 pelota_rect.midbottom = jugador_rect.midtop
 
-vel_x = VEL_PELOTA
-vel_y = VEL_PELOTA
+#*--------------------------------------------------------------------------------------------------------------------<<<<<<
+
 
 #puntaje y estadisticas
-bonus_estado = False
+#bonus_estado = False
 puntaje = 0
 vidas = configuracion["vidas"]
+datos_diccionario = {"vidas":vidas,"puntaje":puntaje}
+bonus_parametros = {"vel_x" : VEL_PELOTA }
+
 
 
 pygame.mixer.music.play()
@@ -241,20 +256,28 @@ while jugando:
                     pygame.mixer.music.unpause()
 
                 pantalla.blit(fondo, (0, 0))
-
+                
+                jugador_imagen_scalada = pygame.transform.scale_by(jugador_parametros["jugador_imagen"],0.2)
+                jugador_parametros["jugador_rect"] = jugador_imagen_scalada.get_rect()
+                jugador_parametros["jugador_rect"].centerx = jugador_parametros["centro_x"]
+                jugador_parametros["jugador_rect"].centery = jugador_parametros["centro_y"]
+                
                 #limites jugador
-                if mover_derecha == True and jugador_rect.right <= ANCHO_VENTANA:
-                    jugador_rect.centerx += VEL_JUGADOR
-                if mover_izquierda == True and jugador_rect.left >= 0:
-                    jugador_rect.centerx -= VEL_JUGADOR
+                if mover_derecha == True and jugador_parametros["jugador_rect"].right <= ANCHO_VENTANA:
+                    jugador_parametros["centro_x"] += VEL_JUGADOR
+                if mover_izquierda == True and jugador_parametros["jugador_rect"].left >= 0:
+                    jugador_parametros["centro_x"] -= VEL_JUGADOR
 
                 # movimiento pelota
-                vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota,rebote)
+                #vel_x, vel_y, vidas, sel_col_pelota = pelota_logica(pelota_rect, jugador_rect, vel_x, vel_y, ANCHO_VENTANA, ALTO_VENTANA, vidas,sel_col_jug,sel_col_pelota,rebote)
+                vidas = pelota_logica(pelota_parametros, jugador_parametros, ANCHO_VENTANA, ALTO_VENTANA, vidas,rebote)
 
                 #logica bloques y penalizacion
-                vel_y, puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota)
+                #vel_y, puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota)
+                puntaje = bloques.logica_bloques(esq_bloques, lista_bonus, puntaje, pelota_parametros)
 
-                vel_x, vel_y, vidas, ancho_jugador, bonus_estado, tiempo = bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas, ancho_jugador, tiempo)
+                #vel_x, vel_y, vidas, ancho_jugador, bonus_estado, tiempo = bonus_logica(pantalla, lista_bonus_imagen, lista_bonus_rect, pelota_rect, lista_bonus, vel_x, vel_y, bonus_estado, vidas, ancho_jugador, tiempo)
+                vidas, tiempo = bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jugador_parametros, tiempo)
 
                 #puntaje al perder la partida
                 if vidas == 0:
@@ -273,32 +296,42 @@ while jugando:
                 bloques.dibujado_bloques(pantalla,esq_bloques,fuente)
                 
                 #penalizacion jugador pequeño
-                jugador_imagen, color_actual = cambiar_tamaño_jugador(sel_col_jug,ancho_jugador)
+                #jugador_imagen, color_actual = cambiar_tamaño_jugador(sel_col_jug,ancho_jugador)
+                cambiar_tamaño_jugador(jugador_parametros)
 
-                if bonus_estado == True and (pygame.time.get_ticks() - tiempo > 5000):
-                    ancho_jugador = 1
+                if bonus_tipos[0]["estado_bonus"] == True and (pygame.time.get_ticks() - tiempo > 5000):
+                    jugador_parametros["ancho_jugador"] = 1
+                    bonus_tipos[0]["estado_bonus"] = False
 
 
-                jugador_imagen_escala = pygame.transform.scale_by(jugador_imagen,0.2)
-                juegador_rect = jugador_imagen_escala.get_rect()
+                
+
+
+    
 
                 #cambio de color de la pelota
-                if sel_col_pelota == 0:
-                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_VERDE)
-                elif sel_col_pelota == 1:
-                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_AZUL)
-                elif sel_col_pelota == 2:
-                    pelota_imagen, color_actual = cambiar_color_pelota(PEL_ROJA)
+                if pelota_parametros["sel_col_pelota"]  == 0:
+                    color = PEL_VERDE
+                elif pelota_parametros["sel_col_pelota"] == 1:
+                    color = PEL_AZUL
+                elif pelota_parametros["sel_col_pelota"] == 2:
+                    color = PEL_ROJA
+                
+                pelota_imagen = cambiar_color_pelota(color, pelota_parametros)
 
                 #dibujado en pantalla de pelota y jugador
                 pantalla.blit(pelota_imagen, pelota_rect)
-                pantalla.blit(jugador_imagen_escala, jugador_rect)
+
+                pantalla.blit(jugador_imagen_scalada, jugador_parametros["jugador_rect"])
 
 
                 #ganar partida cuando la lista de bloques esta vacia
                 if len(esq_bloques)== 0:
                     partida_ganada = True                
                 
+                #print(jugador_parametros["centro_x"])
+                #print(jugador_parametros["centro_y"])
+                print(jugador_parametros["jugador_rect"].centerx)
                 
 
     #eventos
@@ -313,9 +346,9 @@ while jugando:
                 if evento.key == pygame.K_d:
                         mover_derecha = True
                 if evento.key == pygame.K_SPACE:
-                    sel_col_jug +=1
-                    if sel_col_jug>2:
-                        sel_col_jug = 0
+                    jugador_parametros["sel_col_jug"] += 1
+                    if jugador_parametros["sel_col_jug"]>2:
+                        jugador_parametros["sel_col_jug"] = 0
                 if evento.key == pygame.K_p:
                     if pausa_juego == False:
                         pausa_juego = True

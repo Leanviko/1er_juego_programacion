@@ -10,9 +10,12 @@ AZUL = configuracion["azul"]
 VERDE = configuracion["verde"]
 
 
-def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota):
+def logica_bloques(lista_bloques, lista_bonus, puntaje, pelota_parametros):
 
     """
+    
+    (lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_col_pelota)
+
     Manejo del las colisiones del la bola con los bloques
 
     Args:
@@ -25,12 +28,12 @@ def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_c
     """
 
     for bloque in lista_bloques:  
-        if bloque["golpes"]>0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
+        if bloque["golpes"]> 0 and pygame.Rect.colliderect(pelota_parametros["pelota_rect"],bloque["rect"]):
             
-            if bloque["golpes"] == (sel_col_pelota+1):
+            if bloque["golpes"] == (pelota_parametros["sel_col_pelota"]+1):
                 bloque["golpes"] -= 1
                 puntaje += 50
-            vel_y *= -1
+            pelota_parametros["vel_y"] *= -1
             
             break            
                         
@@ -47,7 +50,8 @@ def logica_bloques(lista_bloques,lista_bonus, pelota_rect, vel_y, puntaje, sel_c
 
             lista_bloques.remove(bloque)
         
-    return vel_y, puntaje
+    #return vel_y, puntaje
+    return  puntaje
 
 def dibujado_bloques(pantalla, lista_bloques, fuente):
     """
@@ -90,3 +94,29 @@ def dibujado_bloques(pantalla, lista_bloques, fuente):
             #         pelota_rect.bottom = bloque["rect"].top
 
             #     vel_y *= -1
+
+
+'''
+for bloque in lista_bloques:  
+        if bloque["golpes"]> 0 and pygame.Rect.colliderect(pelota_rect,bloque["rect"]):
+            
+            if bloque["golpes"] == (sel_col_pelota+1):
+                bloque["golpes"] -= 1
+                puntaje += 50
+            vel_y *= -1
+            
+            break            
+                        
+        if bloque["golpes"] <= 0:
+            pos_x = bloque["rect"].centerx
+            pos_y= bloque["rect"].centery
+
+            puntaje += 100
+            bonus = random.randrange(1,6)
+            if bonus == 1:
+                lista_bonus.append({"tipo":1,"pos_x": pos_x,"pos_y": pos_y})
+            # if bonus == 2:
+            #     lista_bonus.append({"tipo":2,"pos_x": pos_x,"pos_y": pos_y})
+
+            lista_bloques.remove(bloque)
+'''
