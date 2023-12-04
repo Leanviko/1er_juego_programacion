@@ -47,6 +47,10 @@ def bonus_logica(pantalla,lista_bonus, bonus_tipos, pelota_parametros, vidas,jug
             bonus_tipos[0]["estado_bonus"] = True
             tiempo = pygame.time.get_ticks()
 
+    if bonus_tipos[0]["estado_bonus"] == True and (pygame.time.get_ticks() - tiempo > 5000):
+        jugador_parametros["ancho_jugador"] = 1
+        bonus_tipos[0]["estado_bonus"] = False
+
 
     '''
     for bonus in lista_bonus:

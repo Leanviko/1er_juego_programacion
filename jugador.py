@@ -11,6 +11,20 @@ J_AZUL_CORTO = configuracion["jugador_azul_corto"]
 J_VERDE_LARGO = configuracion["jugador_verde_largo"]
 J_VERDE_CORTO = configuracion["jugador_verde_corto"]
 
+def movimiento_jugador(jugador_parametros,mover_derecha,mover_izquierda, VEL_JUGADOR, ANCHO_VENTANA):
+    jugador_parametros["jugador_imagen_scalada"] = pygame.transform.scale_by(jugador_parametros["jugador_imagen"],0.2)
+    jugador_parametros["jugador_rect"] = jugador_parametros["jugador_imagen_scalada"].get_rect()
+    jugador_parametros["jugador_rect"].centerx = jugador_parametros["centro_x"]
+    jugador_parametros["jugador_rect"].centery = jugador_parametros["centro_y"]
+    
+    #limites jugador
+    if mover_derecha == True and jugador_parametros["jugador_rect"].right <= ANCHO_VENTANA:
+        jugador_parametros["centro_x"] += VEL_JUGADOR
+    if mover_izquierda == True and jugador_parametros["jugador_rect"].left >= 0:
+        jugador_parametros["centro_x"] -= VEL_JUGADOR
+
+    
+
 def cambiar_tamaño_jugador(jugador_parametros):
 
     """

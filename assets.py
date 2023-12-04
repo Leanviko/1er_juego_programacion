@@ -28,6 +28,9 @@ PEL_ROJA = configuracion["pelota_roja"]
 PEL_AZUL = configuracion["pelota_azul"]
 PEL_VERDE = configuracion["pelota_verde"]
 
+puntaje = 0
+vidas = configuracion["vidas"]
+
 color_actual = PEL_AZUL
 
 
@@ -74,6 +77,6 @@ pelota_rect = pelota_imagen.get_rect()
 
 #jugador
 jugador_imagen = pygame.image.load("imagenes/jugador/j_azul_largo.png").convert_alpha()
-jugador_imagen = pygame.transform.scale_by(jugador_imagen,0.2)
-jugador_rect = jugador_imagen.get_rect()
+jugador_imagen_scalada = pygame.transform.scale_by(jugador_imagen,0.2)
+jugador_rect = jugador_imagen_scalada.get_rect()
 #jugador_rect.center = (ANCHO_VENTANA//2-50, ALTO_VENTANA-50)
